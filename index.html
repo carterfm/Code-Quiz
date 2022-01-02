@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Code Quiz</title>
+        <link rel="stylesheet" href="./assets/css/style.css"/>
+    </head>
+
+    <body>
+        <!--
+            Since it seems easier that creating and appending children, then removing them,
+            I'm just going to go ahead and create a series of sections/divs that will be 
+            hidden and revealed based on user input.
+
+            In broad strokes, before I do any CSS to work out the formatting, here's what
+            I'm thinking:
+            
+            - Header (always present except when High Scores shown)
+                - View High Scores
+                - Time: X (0 by default, ticks down from 75 when in quiz, freezes on all)
+            - Welcome section (present before and after a quiz + potential look at high scores)
+                - bold h1 with title
+                - P with description
+                - start button
+            - Quiz section
+                - bold h2 with question
+                - ol
+                    - 4 list items with answer choices--buttons, essentially
+            - Finished quiz section
+                - bold h2 saying user is done
+                - p displaying final score
+                - 
+        -->
+        <!-- Test code from early on<header>
+            <h2 class="test">Testing</h2>
+            <button id="reveal">Press to reveal hidden h2</button>
+        </header>-->
+
+        <header>
+            <p id="score">View High Scores</p>
+            <!--Using a class rather than an id for the countdown number since we'll also use 
+            the same number later for our score-->
+            <p>Time left: <span class="countdown">0</span></p>
+        </header>
+        
+        <section id="welcome-screen">
+            <h1>Coding Quiz Challenge</h1>
+            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+            <button>Start Quiz</button>
+        </section>
+
+        <section id="quiz-screen">
+            <h2>Question placeholder</h2>
+            <ol>
+                <li>Answer placeholder</li>
+                <li>Answer placeholder</li>
+                <li>Answer placeholder</li>
+                <li>Answer placeholder</li>
+            </ol>
+        </section>
+
+        <section id="end-screen">
+            <h2>All done!</h2>
+            <p>You final score is <span class="countdown"></span></p>
+            <div>
+                <p>Enter initials: </p>
+                <input id="initials"/>
+                <button>Submit</button>
+            </div>
+        </section>
+
+        <section id="high-scores">
+            <h1>High Scores</h1>
+            <ol id="score-list">
+                <!--Will remove this placeholder later-->
+                <li>placeholder</li>
+            </ol>
+            <div>
+                <button class="high-score-buttons">Go back</button>
+                <button class="high-score-buttons">Clear High Scores</button>
+            </div>
+        </section>
+
+        <div id="answer-feedback">
+            Placeholder text!
+        </div>
+
+        <script src="./assets/js/script.js"></script>
+    </body>
+
+
+</html>
