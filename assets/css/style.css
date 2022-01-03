@@ -1,3 +1,91 @@
+:root {
+    --button-purple: #423255;
+    --result-grey: #eee5f8;
+}
 
+body {
+    font-family: sans-serif;
+}
 
-/*I know that some of these classes are technically unnecessary, but I prefer to hav*/
+h1 {
+    margin: 5px;
+    margin-left: 0px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+h2 {
+    margin: 5px;
+    margin-left: 0px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+}
+
+header p {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+section {
+    width: 60%;
+    margin: 10px auto;
+}
+
+.button {
+    padding: 5px;
+    border-style: none;
+    border-radius: 8px;
+    font-size: 1rem;
+
+    background-color: var(--button-purple);
+    color: white;
+
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: 75%;
+}
+
+#welcome-screen {
+    text-align: center;
+}
+
+#quiz-screen ul {
+    margin-top: 0px;
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style-type: none;
+    width: fit-content;
+}
+
+#quiz-screen li {
+    margin: 5px auto;
+}
+
+#end-screen div p {
+    display: inline;
+}
+
+#initials {
+    height: 1.5rem;
+}
+
+#score-list {
+    background-color: var(--result-grey);
+}
+
+#answer-feedback {
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 3px;
+    border-top-style: solid;
+    border-color: grey;
+    color: grey;
+}
