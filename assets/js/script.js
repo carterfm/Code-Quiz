@@ -39,7 +39,6 @@ var inputEl = document.querySelector("initials");
 //variables for tracking data necessary to the functioning of the app
 //Starting value of our timer for our quiz
 var timeLeft = 75;
-countdownEl.textContent = timeLeft;
 //Variable to track whether we're done with the quiz or not
 var isPlaying = false;
 //variable to track which question/answer set we should display once the quiz has started
@@ -108,7 +107,6 @@ function displayQuestions(){
             console.log(quizScreenEls[i].id);*/
             quizScreenEls[i].textContent = questions[questionIndex][quizScreenEls[i].id]
         }
-        questionIndex++;
     } else {
         endQuiz();
     }
@@ -122,9 +120,23 @@ function endQuiz(){
     questionIndex = 0;
 }
 
-/*function displayFeedback(){
+//feedbackEl will be rendered with a different message depending on whether or not the 
+//answer chosen was correct
+function displayFeedback(correct){
+    if(correct){
+        feedbackEl.textContent = "Correct!";
+    } else {
+        feedbackEl.textContent = "Wrong!";
+    }
 
-}*/
+    feedbackEl.setAttribute("style", "display: block");
+
+    //Is this the right way to time this out?
+    var feedbackInterval = setInterval(function(){
+        feedbackEl.setAttribute("style", "display: none");
+        clearInterval(feedbackInterval);
+    }, 2000)
+}
 
 function displayHighScores(){
     headerEl.setAttribute("style", "display: none");
@@ -221,6 +233,15 @@ answersEl.addEventListener("click", function(event){
     var element = event.target;
     
     if (element.matches("li")) {
+        if (element.textContent === questions[questionIndex].correctAnswer){
+            displayFeedback(true);
+        } else {
+            displayFeedback(false);
+            timeLeft -= 10;
+            //Putting this here to make sure the timer is updated one last time before the quiz ends
+            countdownEl.textContent = timeLeft;
+        }
+        questionIndex++;
         displayQuestions();
     }
 })
@@ -228,12 +249,10 @@ answersEl.addEventListener("click", function(event){
 //Listener to check for form submission on quiz end screen
 //How can we make the submit event (very evil) get along with the rest of this?
 initialsFormEl.addEventListener("submit", function(event){
-    console.log("Submitted initialsFormEl");
     event.preventDefault();
     var inputtedInitials = initialsEl.value.trim();
     //do nothing if the player hasn't input initials
     if (inputtedInitials === "") {
-        console.log("I swear to God almighty if you don't input actual initials it'll be seven stripes across the ass");
         return;
     }
     addNewScore(inputtedInitials);
