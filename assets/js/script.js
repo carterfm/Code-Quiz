@@ -86,12 +86,16 @@ function displayQuestions(){
         }
         questionIndex++;
     } else {
-        isPlaying = false;
-        quizEl.setAttribute("style", "display: none");
-        endEl.setAttribute("style", "display: block");
-        finalScoreEl.textContent = timeLeft;
-        questionIndex = 0;
+        endQuiz();
     }
+}
+
+function endQuiz(){
+    isPlaying = false;
+    quizEl.setAttribute("style", "display: none");
+    endEl.setAttribute("style", "display: block");
+    finalScoreEl.textContent = timeLeft;
+    questionIndex = 0;
 }
 
 //TODO: find out how to check for isPlaying being set to false more frequently than once
@@ -100,13 +104,22 @@ function startQuizTimer(){
         timeLeft--;
         countdownEl.textContent = timeLeft;
 
-        if(timeLeft === 0 || isPlaying === false){
+        if(timeLeft === 0){
             clearInterval(quizTimer);
+            clearInterval(playingCheck);
+            endQuiz();
             //call a function moving us on to the next section of the game
         }
     }, 1000);
-}
-//function tim
+    //A second interval to check if the player has finished the quiz before the timer runs out
+    //And stop the timer from ticking down any further
+    var playingCheck = setInterval(function(){
+        if(!isPlaying){
+            clearInterval(quizTimer);
+            clearInterval(playingCheck);
+        }
+    }, 1);
+} 
 
 //Event listeners for various events
 startButtonEl.addEventListener("click", displayQuiz);

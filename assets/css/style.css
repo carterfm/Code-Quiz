@@ -82,6 +82,10 @@ section {
     display: inline;
 }
 
+#final-score {
+    font-weight: bold;
+}
+
 #initials {
     height: 1.5rem;
 }
