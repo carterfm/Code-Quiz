@@ -86,7 +86,7 @@ section {
     font-weight: bold;
 }
 
-#high-scores {
+#high-scores-screen {
     margin-top: 100px;
 }
 
@@ -95,7 +95,12 @@ section {
 }
 
 #score-list {
+    padding: 10px;
     background-color: var(--result-grey);
+}
+
+#score-list li {
+    margin-left: 1rem;
 }
 
 #answer-feedback {
