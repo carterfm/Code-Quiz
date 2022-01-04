@@ -5,6 +5,7 @@ var welcomeEl = document.querySelector("#welcome-screen");
 var quizEl = document.querySelector("#quiz-screen");
 var endEl = document.querySelector("#end-screen");
 var highScoreEl = document.querySelector("#high-scores");
+var highScoreListEl = document.querySelector("#score-list");
 var feedbackEl = document.querySelector("#answer-feedback");
 
 var questionEl = document.querySelector("#question");
@@ -95,7 +96,19 @@ function endQuiz(){
     quizEl.setAttribute("style", "display: none");
     endEl.setAttribute("style", "display: block");
     finalScoreEl.textContent = timeLeft;
+    timeLeft = 75;
     questionIndex = 0;
+}
+
+function displayHighScores(){
+    //Some of these are redundant, given when this function is called, but I just want to cover all our bases.
+    headerEl.setAttribute("style", "display: none");
+    welcomeEl.setAttribute("style", "display: none");
+    quizEl.setAttribute("style", "display: none");
+    endEl.setAttribute("style", "display: none");
+    feedbackEl.setAttribute("style", "display: none");
+
+    highScoreEl.setAttribute("style", "display: block");
 }
 
 //TODO: find out how to check for isPlaying being set to false more frequently than once
@@ -121,14 +134,38 @@ function startQuizTimer(){
     }, 1);
 } 
 
+function clearHighScores(){
+    console.log("clearHighScores called");
+    console.log(highScoreListEl.children.length);
+    var scoreLength = highScoreListEl.children.length
+    for(var i = 0; i < scoreLength; i++) {
+        //removing the first element length times gives you no remaining elements
+        console.log("Removing first element of highScoreListEl.children");
+        highScoreListEl.children[0].remove();
+    }
+}
+
 //Event listeners for various events
 startButtonEl.addEventListener("click", displayQuiz);
+highScoreLinkEl.addEventListener("click", displayHighScores);
 
+//Listener to check for clicks on answers page
 answersEl.addEventListener("click", function(event){
     var element = event.target;
     
     if (element.matches("li")) {
         displayQuestions();
+    }
+})
+
+//Listener to check for clicks on buttons on High Scores page;
+highScoreEl.addEventListener("click", function(event){
+    var element = event.target;
+
+    if(element.id === "go-back") {
+        displayWelcome();
+    } else if(element.id === "clear-scores") {
+        clearHighScores();
     }
 })
 
