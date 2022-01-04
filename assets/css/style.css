@@ -33,7 +33,7 @@ header p {
 }
 
 section {
-    width: 60%;
+    width: 50%;
     margin: 10px auto;
 }
 
@@ -53,6 +53,15 @@ section {
     opacity: 75%;
 }
 
+#score-link {
+    cursor: pointer;
+}
+
+#score-link:hover {
+    opacity: 75%;
+    text-decoration: underline;
+}
+
 #welcome-screen {
     text-align: center;
 }
@@ -69,7 +78,7 @@ section {
     margin: 5px auto;
 }
 
-#end-screen div p {
+#end-screen form p {
     display: inline;
 }
 

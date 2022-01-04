@@ -40,36 +40,35 @@
         </header>-->
 
         <header>
-            <p id="score">View High Scores</p>
-            <!--Using a class rather than an id for the countdown number since we'll also use 
-            the same number later for our score-->
-            <p>Time left: <span class="countdown">0</span></p>
+            <p id="score-link">View High Scores</p>
+            <p>Time left: <span id="countdown"></span></p>
         </header>
         
         <section id="welcome-screen">
             <h1>Coding Quiz Challenge</h1>
             <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
-            <button class="button">Start Quiz</button>
+            <button class="button" id="start-button">Start Quiz</button>
         </section>
 
         <section id="quiz-screen">
-            <h2>Question placeholder</h2>
-            <ul>
-                <li class="button">Answer placeholder</li>
-                <li class="button">Answer placeholder</li>
-                <li class="button">Answer placeholder</li>
-                <li class="button">Answer placeholder</li>
+            <h2 id="question">Question placeholder</h2>
+            <ul id="quiz-answers">
+                <li class="button" id="answer1">Answer placeholder</li>
+                <li class="button" id="answer2">Answer placeholder</li>
+                <li class="button" id="answer3">Answer placeholder</li>
+                <li class="button" id="answer4">Answer placeholder</li>
             </ul>
         </section>
 
         <section id="end-screen">
             <h2>All done!</h2>
-            <p>You final score is <span class="countdown"></span></p>
-            <div>
+            <p>You final score is <span id="final-score"></span></p>
+            <form>
+                <!--Change this div to a form-->
                 <p>Enter initials: </p>
                 <input id="initials"/>
                 <button class="button">Submit</button>
-            </div>
+            </form>
         </section>
 
         <section id="high-scores">
