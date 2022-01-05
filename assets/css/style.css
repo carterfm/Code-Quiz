@@ -86,12 +86,12 @@ section {
     font-weight: bold;
 }
 
-#high-scores-screen {
-    margin-top: 100px;
-}
-
 #initials {
     height: 1.5rem;
+}
+
+#high-scores-screen {
+    margin-top: 100px;
 }
 
 #score-list {

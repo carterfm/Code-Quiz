@@ -5,6 +5,7 @@ var highScoreLinkEl = document.querySelector("#score-link");
 var countdownEl = document.querySelector("#countdown");
 
 var welcomeEl = document.querySelector("#welcome-screen");
+var startButtonEl = document.querySelector("#start-button");
 
 var quizEl = document.querySelector("#quiz-screen");
 var questionEl = document.querySelector("#question");
@@ -26,16 +27,6 @@ var highScoreListEl = document.querySelector("#score-list");
 
 var feedbackEl = document.querySelector("#answer-feedback");
 
-
-
-//variables for the header elements
-//Change this to target specific elements
-
-
-//variables for buttons and input field 
-var startButtonEl = document.querySelector("#start-button");
-var inputEl = document.querySelector("initials");
-
 //variables for tracking data necessary to the functioning of the app
 //Starting value of our timer for our quiz
 var timeLeft = 75;
@@ -43,8 +34,7 @@ var timeLeft = 75;
 var isPlaying = false;
 //variable to track which question/answer set we should display once the quiz has started
 var questionIndex = 0;
-//each score is going to be an array in the form ["initials", scoreNumber]
-//Might change this to an object instead of an array of arrays if Louis suggests as much
+//each score is going to be an object in the form {initials: "initials", score: scoreNumber}
 var highScores = [];
 
 //So, we need to keep track of which answer is true and which one is false, huh
@@ -69,11 +59,7 @@ function initialize(){
     displayWelcome();
 }
 
-function storeHighScores(){
-    localStorage.setItem("highScores", JSON.stringify(highScores));
-}
-//By default, when you open the webpage, everything but the header and welcome sections should be hidden
-//We'll package those instructions in a function so we can call it again when returning after finishing a quiz
+// Functions pertaining to displaying and hiding elements on the page
 function displayWelcome(){
     headerEl.setAttribute("style", "display: flex");
     welcomeEl.setAttribute("style", "display: block");
@@ -87,14 +73,10 @@ function displayWelcome(){
     countdownEl.textContent = timeLeft;
 }
 
-
-//Functions to be called by our event listeners
-
 function displayQuiz(){
     quizEl.setAttribute("style", "display: block");
     welcomeEl.setAttribute("style", "display: none");
-    //I don't want the player to click away to view high scores in the middle of a quiz
-    //I can remove this line if the professor would like that to be possible
+
     isPlaying = true;
     displayQuestions()
     startQuizTimer();
@@ -103,8 +85,6 @@ function displayQuiz(){
 function displayQuestions(){
     if(questionIndex < questions.length) {
         for(var i = 0; i < quizScreenEls.length; i++) {
-            /*console.log(quizScreenEls[i]);
-            console.log(quizScreenEls[i].id);*/
             quizScreenEls[i].textContent = questions[questionIndex][quizScreenEls[i].id]
         }
     } else {
@@ -131,34 +111,34 @@ function displayFeedback(correct){
 
     feedbackEl.setAttribute("style", "display: block");
 
-    //Is this the right way to time this out?
-    var feedbackInterval = setInterval(function(){
+    //I want the feedback message to go back to being hidden after being on the screen for one second
+    setTimeout(function(){
         feedbackEl.setAttribute("style", "display: none");
-        clearInterval(feedbackInterval);
-    }, 2000)
+    }, 1000);
 }
 
 function displayHighScores(){
+    //Depending on whether the user got the high scores page from the welcome screen or the end screen of the
+    //quiz, one of these is going to be redundant, but that should be OK.
     headerEl.setAttribute("style", "display: none");
     welcomeEl.setAttribute("style", "display: none");
-    quizEl.setAttribute("style", "display: none");
     endEl.setAttribute("style", "display: none");
-    feedbackEl.setAttribute("style", "display: none");
 
     //First, emptying our highScoreListEl to make sure we don't double-print scores
     highScoreListEl.innerHTML = "";
 
-    //Next, actually displaying the 
+    console.log(highScores);
+    //Next, actually building up the list that will appear under highScoreListEl
     for(var i = 0; i < highScores.length; i++) {
         var li = document.createElement("li");
         //lis will be of the form initials - scorenumber
-        li.textContent = highScores[i][0] + " - " + highScores[i][1];
+        li.textContent = highScores[i].initials + " - " + highScores[i].score;
         
         highScoreListEl.appendChild(li);
     }
 
     if(isPlaying) {
-        //This is to make sure the timer gets stopped if the player exits the quiz 
+        //This is to make sure the quiz timer gets stopped if the player exits the quiz 
         //by checking the high scores
         isPlaying = false;
     }
@@ -166,7 +146,10 @@ function displayHighScores(){
     highScoreEl.setAttribute("style", "display: block");
 }
 
-//TODO: find out how to check for isPlaying being set to false more frequently than once
+//Function that manages the quiz timer while the game is being played
+//Featuress two intervals: one that decrements the timer readout by one every second, and another that
+//checks every millisecond to see if the quiz has been finished by another means and stop the timer
+//from further decrementing if so.
 function startQuizTimer(){
     var quizTimer = setInterval(function(){
         timeLeft--;
@@ -189,21 +172,21 @@ function startQuizTimer(){
     }, 1);
 } 
 
+//Clears highscores on both the high scores page and in local storage
 function clearHighScores(){
     highScores = [];
     storeHighScores();
     displayHighScores();
 }
 
-//This is going to be an ordered list, right? So we need
-//Each score is going to be an array con
+//Adds a new score object (and initials/score pair) into the highScore array, sorted based on 
+//the score value.
 function addNewScore(playerName){
-    console.log("addNewScore called");
     //Setting the score number equal to timeLeft, then resetting timeLeft to its initial value
     var scoreNum = timeLeft;
     timeLeft = 75;
-    //The array we'll put into our array of initials - score pairs
-    var scorePair = [playerName, scoreNum];
+    //Defining the initials: score pair to be added to highScores
+    var scorePair = {initials: playerName, score: scoreNum};
     var scoresLength = highScores.length;
     //Now to actually add in our new score in the appropriate spot!
     //First we'll deal with the case where highScores is empty; then we'll
@@ -211,7 +194,7 @@ function addNewScore(playerName){
         highScores.push(scorePair);
     } else {
         for(var i = 0; i < scoresLength; i++) {
-            if(scoreNum > highScores[i][1]) {
+            if(scorePair.score > highScores[i].score) {
                 highScores.splice(i, 0, scorePair);
                 break;
             } else if (i === scoresLength - 1) {
@@ -224,11 +207,15 @@ function addNewScore(playerName){
     storeHighScores();
 }
 
+//updating highScores in local storage
+function storeHighScores(){
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+}
+
 //Event listeners for various events
 startButtonEl.addEventListener("click", displayQuiz);
 highScoreLinkEl.addEventListener("click", displayHighScores);
 
-//Listener to check for clicks on answers page
 answersEl.addEventListener("click", function(event){
     var element = event.target;
     
@@ -239,6 +226,7 @@ answersEl.addEventListener("click", function(event){
             displayFeedback(false);
             timeLeft -= 10;
             //Putting this here to make sure the timer is updated one last time before the quiz ends
+            //In the case that this else is triggered on the last question of the quiz
             countdownEl.textContent = timeLeft;
         }
         questionIndex++;
@@ -247,10 +235,10 @@ answersEl.addEventListener("click", function(event){
 })
 
 //Listener to check for form submission on quiz end screen
-//How can we make the submit event (very evil) get along with the rest of this?
 initialsFormEl.addEventListener("submit", function(event){
     event.preventDefault();
     var inputtedInitials = initialsEl.value.trim();
+    initialsEl.value = "";
     //do nothing if the player hasn't input initials
     if (inputtedInitials === "") {
         return;
