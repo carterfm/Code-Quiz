@@ -70,6 +70,7 @@ function displayWelcome(){
     feedbackEl.setAttribute("style", "display: none");
 
     timeLeft = 75;
+    questionIndex = 0;
     countdownEl.textContent = timeLeft;
 }
 
@@ -82,6 +83,7 @@ function displayQuiz(){
     startQuizTimer();
 }
 
+//We handle iterating questionIndex up in our check for clicks on the answer elements, not here
 function displayQuestions(){
     if(questionIndex < questions.length) {
         for(var i = 0; i < quizScreenEls.length; i++) {
@@ -97,7 +99,6 @@ function endQuiz(){
     quizEl.setAttribute("style", "display: none");
     endEl.setAttribute("style", "display: block");
     finalScoreEl.textContent = timeLeft;
-    questionIndex = 0;
 }
 
 //feedbackEl will be rendered with a different message depending on whether or not the 
@@ -111,17 +112,18 @@ function displayFeedback(correct){
 
     feedbackEl.setAttribute("style", "display: block");
 
-    //I want the feedback message to go back to being hidden after being on the screen for one second
+    //The feedback message goes back to being hidden after being on the screen for one second
     setTimeout(function(){
         feedbackEl.setAttribute("style", "display: none");
     }, 1000);
 }
 
 function displayHighScores(){
-    //Depending on whether the user got the high scores page from the welcome screen or the end screen of the
-    //quiz, one of these is going to be redundant, but that should be OK.
+    //Depending on whether the user got to the high scores page from the welcome screen, the quiz screen,
+    // or the end screen of the quiz, one of these is going to be redundant, but that should be OK.
     headerEl.setAttribute("style", "display: none");
     welcomeEl.setAttribute("style", "display: none");
+    quizEl.setAttribute("style", "display: none");
     endEl.setAttribute("style", "display: none");
 
     //First, emptying our highScoreListEl to make sure we don't double-print scores
@@ -216,6 +218,7 @@ function storeHighScores(){
 startButtonEl.addEventListener("click", displayQuiz);
 highScoreLinkEl.addEventListener("click", displayHighScores);
 
+//Checking for clicks on answers on quiz page
 answersEl.addEventListener("click", function(event){
     var element = event.target;
     
@@ -224,6 +227,7 @@ answersEl.addEventListener("click", function(event){
             displayFeedback(true);
         } else {
             displayFeedback(false);
+            //Decrements timer down by 10 seconds for each incorrect answer
             timeLeft -= 10;
             //Putting this here to make sure the timer is updated one last time before the quiz ends
             //In the case that this else is triggered on the last question of the quiz
@@ -239,7 +243,7 @@ initialsFormEl.addEventListener("submit", function(event){
     event.preventDefault();
     var inputtedInitials = initialsEl.value.trim();
     initialsEl.value = "";
-    //do nothing if the player hasn't input initials
+    //do nothing if the user hasn't input initials
     if (inputtedInitials === "") {
         return;
     }
